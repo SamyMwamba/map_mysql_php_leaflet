@@ -1,12 +1,28 @@
 <?php
- require_once("db.php");
- $companies = $conn->getCompaniesList();
- $streets = $conn->getStreetsList();
- $areas = $conn->getAreasList();
+ require_once 'Companies.php';
+ $company=array();
+ $company= Companies::getCompaniesList();
+ $a = array();
+ $b = array();
+ foreach ($company as $row) {
+
+     $b['id'] = $row->getId();
+     $b['company'] = $row->getCompany();
+     $b['details'] = $row->getDetails();
+     $b['latitude'] = $row->getLatitude();
+     $b['longitude'] = $row->getLongitude();
+     $b['telephone'] = $row->getTelephone();
+     array_push($a, $b);
+
+
+ }
+
+
+
 ?>
-<!Doctype html>
 <html>
   <head>
+    <script src="node_modules/jquery/dist/jquery.min.js"></script>
     <script src='https://api.mapbox.com/mapbox-gl-js/v0.47.0/mapbox-gl.js'></script>
     <link href='https://api.mapbox.com/mapbox-gl-js/v0.47.0/mapbox-gl.css' rel='stylesheet' />
     <link rel="stylesheet" href="node_modules/leaflet/dist/leaflet.css"/>
@@ -25,9 +41,9 @@
            }).addTo(map);
           </script>
           <script>
-            var companies = JSON.parse( '<?php echo json_encode($companies) ?>' );
-            var streets = JSON.parse( '<?php echo json_encode($streets) ?>' );
-            var areas = JSON.parse( '<?php echo json_encode($areas) ?>' );
+            var companies = JSON.parse( '<?php echo json_encode($a) ?>' );
+            //var streets = JSON.parse( '<?php echo json_encode($streets) ?>' );
+            //var areas = JSON.parse( '<?php echo json_encode($areas) ?>' );
           </script>
 
           <script>
@@ -81,9 +97,12 @@
                  for(i=0; i < linesLng.length; i++) {
                   latLngLine.push( L.latLng( linesLat[i], linesLng[i]));
                  }
-                 
+
                  return latLngLine;
         }
+
+
+
           </script>
  </body>
 </html>
